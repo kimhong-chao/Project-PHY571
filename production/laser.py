@@ -5,6 +5,7 @@ class laser:
         self.medium = medium
         self.wave_nb = wave_nb
         self.K_coef = K_coef
+        self.nb_save = 10
         
         self.intensity_z = np.zeros([Nz, 2*N, 2*N])
         self.E_z = np.zeros([Nz, 2*N, 2*N])
@@ -75,7 +76,6 @@ class laser:
             return 0
             
         if(self.medium == 'Kerr'):
-            
             return const3*E*np.abs(E)**2
         
         if(self.medium == 'Absorption'):
