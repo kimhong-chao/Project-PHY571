@@ -20,14 +20,15 @@ N = 128
 Lz = 1.0
 Nz = 512
 
-laser = laser.laser(L, N, Lz, Nz, k, K, 'Linear')
+laser = laser.laser(L, N, Lz, Nz, k, K, 'Kerr')
 laser.initialize(gauss)
 laser.propagation()
 
-with open('../results/result_linear.txt', 'w') as outfile:
+with open('result_kerr.txt', 'w') as outfile:
     outfile.write('# Array shape: {0}\n'.format(laser.E_z.shape))   
     for data_slice in laser.E_z:
         np.savetxt(outfile, data_slice)
         outfile.write('# New slice\n')
                     
+
 
