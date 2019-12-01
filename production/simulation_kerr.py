@@ -18,7 +18,7 @@ K = 7
 L = 16*1e-4
 N = 64
 Lz = 1.0
-Nz = 100
+Nz = 1000
 
 laser = laser.laser(L, N, Lz, Nz, k, K, 'Kerr', nb_save = 10)
 laser.initialize(gauss)
@@ -31,4 +31,5 @@ with open('../results/intensity_kerr.txt', 'wb') as outfile:
 
                     
 
+    
 
