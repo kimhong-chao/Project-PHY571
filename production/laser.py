@@ -1,8 +1,8 @@
 import numpy as np
 class laser:
-    def __init__(self, L, N, Lz, Nz, wave_nb, K_coef, medium):
+    def __init__(self, L, N, Lz, Nz, wave_nb, K_coef, effect, nb_save):
         
-        self.medium = medium
+        self.effect = effect
         self.wave_nb = wave_nb
         self.K_coef = K_coef
         self.nb_save = 10
@@ -28,17 +28,21 @@ class laser:
         
     def initialize(self, func):
         self.E = func(self.x, self.y)
+        if(self.effect == 'Pertubation'):
+            self.E += np.max(self.E)*1e-1*np.random.uniform(-1,1)
         
-    def step(self, dz):
-        if(self.medium == 'Beta'):
-            self.E = self.E + self.nonlinear(self.E)*dz
-        else:
+    def step(self, dz, cross, light, lamb, tau, beta, hbar, n2, K, tp, f):
+        if(self.effect == 'Linear' or self.effect == 'Kerr'  \
+           or self.effect == 'Total' or self.effect == 'Pertubation'):
             Ek = np.fft.fft2(self.E)
             Ek *= np.exp(-1j/(2*self.wave_nb)*(self.kxy2)*dz)
             self.E = np.fft.ifft2(Ek)
-            self.E = self.E + self.nonlinear(self.E)*dz
+        self.E = self.E + self.nonlinear(self.E, cross, light, lamb, tau, beta, hbar, \
+                                         n2, K, tp, f)*dz
         
-    def propagation(self):
+    def propagation(self, cross = 5.1*1e-24, light = 3*1e8 , lamb = 790*1e-9\
+        , tau = 3.5*1e-13, beta = 6.5*1e-104, hbar = 6.62*1e-34, n2 = 5.57*1e-23\
+        ,K = 7, tp = 85*1e-15, f = 0.5):
         E_z = []
         intensity_z = []
         E_z.append(self.E)
@@ -46,47 +50,43 @@ class laser:
         dz = self.Lz/self.Nz
         
         for l in range(self.Nz-1):
-            self.step(dz)
-            if(l % 10 == 0):
+            self.step(dz, cross, light ,lamb, tau, beta, hbar, n2, K, tp, f) 
+            if(l % self.nb_save == 0):
                 E_z.append(self.E)
                 intensity_z.append(np.abs(self.E)**2)
                 
         self.E_z = np.asarray(E_z)
         self.intensity_z = np.asarray(intensity_z)
    
-    def nonlinear(self, E, cross = 5.1*1e-24, light = 3*1e8 , lamb = 790*1e-9\
-        , tau = 3.5*1e-13, beta = 6.5*1e-104, hbar = 6.62*1e-34, n2 = 5.57*1e-23\
-        ,K = 7):
+    def nonlinear(self, E, cross, light ,lamb, tau, beta, hbar, n2, K, tp, f):
         #constant used in nonlinear part of equation
-        tp = 85*1e-15
-        f = 0.5
-        omega = 2*np.pi*light/lamb
         
-        const1 = -cross/2*(1 + omega*tau)*beta/(K*hbar*omega)*tp/(8*K)**(1/2)
-        const2 = -beta/2
-        const3 = 1j*omega/light*n2
-        const4 = 1j*omega/light*f*n2
-        #normalised the constants 
-        const1 = const1*(10**8)**(2*K)
-        const2 = const2*(10**8)**(2*K-2)
-        const3 = const3*(10**8)**2
-        const4 = const4*(10**8)**2
+        omega = 2*np.pi*light/lamb
 
-        if(self.medium == 'Linear'):
+        if(self.effect == 'Linear'):
             return 0
             
-        if(self.medium == 'Kerr'):
+        if(self.effect == 'Kerr'):
+            const3 = 1j*omega/light*(1-f)*n2
+            const3 = const3*(10**8)**2
             return const3*E*np.abs(E)**2
         
-        if(self.medium == 'Absorption'):
+        if(self.effect == 'Absorption'):
+            const2 = -beta/2
+            const2 = const2*(10**8)**(2*K-2)
             return const2*E*np.abs(E)**(2*K - 2)    
          
-        if(self.medium == 'Plasma'):
+        if(self.effect == 'Plasma'):
+            const1 = -cross/2*(1 + omega*tau)*beta/(K*hbar*omega)*tp/(8*K)**(1/2)
+            const1 = const1*(10**8)**(2*K)
             return const1*E*np.abs(E)**(2*K)
             
-        if(self.medium == 'Total'):
+        if(self.effect == 'Total' or self.effect == 'Pertubation'):
+            const1 = -cross/2*(1 + omega*tau)*beta/(K*hbar*omega)*tp/(8*K)**(1/2)
+            const2 = -beta/2
+            const3 = 1j*omega/light*(1-f)*n2
             return const1*E*np.abs(E)**(2*K) + const2*E*np.abs(E)**(2*K - 2) \
-                    + (const3 - const4)*E*np.abs(E)**2
+                    + const3*E*np.abs(E)**2
 
    
 
