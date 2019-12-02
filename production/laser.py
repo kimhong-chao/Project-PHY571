@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 class laser:
     def __init__(self, L, N, Lz, Nz, wave_nb, K_coef, effect, nb_save):
         
@@ -52,6 +53,8 @@ class laser:
         print('Begin propagation')
         for l in range(self.Nz-1):
             self.step(dz, cross, light ,lamb, tau, beta, hbar, n2, K, tp, f) 
+            sys.stdout.write('\rCompleted: %.2f %%' %(l/(self.Nz -2)*100))
+            sys.stdout.flush()
             if(l % self.nb_save == 0):
                 E_z.append(self.E)
                 intensity_z.append(np.abs(self.E)**2)
