@@ -58,8 +58,6 @@ class laser:
             if(l % self.nb_save == 0):
                 E_z.append(self.E)
                 intensity_z.append(np.abs(self.E)**2)
-            if(l % (self.nb_save*10) == 0):
-                print('Complete: ',l/(self.Nz)*100,'%')
                 
         self.E_z = np.asarray(E_z)
         self.intensity_z = np.asarray(intensity_z)
