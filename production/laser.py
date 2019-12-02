@@ -49,11 +49,13 @@ class laser:
         intensity_z.append(np.abs(self.E)**2)
         dz = self.Lz/self.Nz
         
+        print('Begin propagation')
         for l in range(self.Nz-1):
             self.step(dz, cross, light ,lamb, tau, beta, hbar, n2, K, tp, f) 
             if(l % self.nb_save == 0):
                 E_z.append(self.E)
                 intensity_z.append(np.abs(self.E)**2)
+                print('Complete: ',l/(self.Nz)*100,'%')
                 
         self.E_z = np.asarray(E_z)
         self.intensity_z = np.asarray(intensity_z)
