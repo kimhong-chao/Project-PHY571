@@ -5,7 +5,7 @@ class laser:
         self.effect = effect
         self.wave_nb = wave_nb
         self.K_coef = K_coef
-        self.nb_save = 10
+        self.nb_save = nb_save
         
         self.intensity_z = np.zeros([Nz, 2*N, 2*N])
         self.E_z = np.zeros([Nz, 2*N, 2*N])
