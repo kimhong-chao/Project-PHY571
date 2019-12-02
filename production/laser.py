@@ -41,7 +41,7 @@ class laser:
         self.E = self.E + self.nonlinear(self.E, cross, light, lamb, tau, beta, hbar, \
                                          n2, K, tp, f)*dz
         
-    def propagation(self, cross = 5.1*1e-24, light = 3*1e8 , lamb = 790*1e-9\
+    def propagation(self, cross = 5.1*1e-24, light = 3*1e8 , lamb = 775*1e-9\
         , tau = 3.5*1e-13, beta = 6.5*1e-104, hbar = 6.62*1e-34, n2 = 5.57*1e-23\
         ,K = 7, tp = 85*1e-15, f = 0.5):
         E_z = []
@@ -81,14 +81,19 @@ class laser:
             return const2*E*np.abs(E)**(2*K - 2)    
          
         if(self.effect == 'Plasma'):
-            const1 = -cross/2*(1 + omega*tau)*beta/(K*hbar*omega)*tp/(8*K)**(1/2)
+            const1 = -cross/2*(1 + 1j*omega*tau)*beta/(K*hbar*omega)*tp/(8*K)**(1/2)
             const1 = const1*(10**8)**(2*K)
             return const1*E*np.abs(E)**(2*K)
             
         if(self.effect == 'Total' or self.effect == 'Pertubation'):
-            const1 = -cross/2*(1 + omega*tau)*beta/(K*hbar*omega)*tp/(8*K)**(1/2)
+            const1 = -cross/2*(1 + 1j*omega*tau)*beta/(K*hbar*omega)*tp*(np.pi/(8*K))**(1/2)
             const2 = -beta/2
             const3 = 1j*omega/light*(1-f)*n2
+            
+            const1 = const1*(10**8)**(2*K)
+            const2 = const2*(10**8)**(2*K-2)
+            const3 = const3*(10**8)**2
+            
             return const1*E*np.abs(E)**(2*K) + const2*E*np.abs(E)**(2*K - 2) \
                     + const3*E*np.abs(E)**2
 
