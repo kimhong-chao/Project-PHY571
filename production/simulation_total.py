@@ -13,10 +13,10 @@ x0 = [0., 0.]
 
 gauss = gaussian.Gaussian(w0, AMP, x0)
 
-lamb = 790*1e-9
+lamb = 775*1e-9
 k = 2*np.pi/lamb
 K = 7
-L = 16*1e-4
+L = 3*1e-3
 N = 64
 Lz = 10
 Nz = 60000
@@ -25,7 +25,7 @@ laser = laser.laser(L, N, Lz, Nz, k, K, 'Total', nb_save = 100)
 laser.initialize(gauss)
 laser.propagation(tp = 200*1e-15)
 
-with open('../results/result_total.txt', 'wb') as outfile:
+with open('../results/intensity_total.txt', 'wb') as outfile:
     #outfile.write('# Array shape: {0}\n'.format(laser.E_z.shape))   
     for data_slice in laser.intensity_z:
         np.savetxt(outfile, data_slice)
