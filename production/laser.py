@@ -81,7 +81,7 @@ class laser:
             return const2*E*np.abs(E)**(2*K - 2)    
          
         if(self.effect == 'Plasma'):
-            const1 = -cross/2*(1 + 1j*omega*tau)*beta/(K*hbar*omega)*tp/(8*K)**(1/2)
+            const1 = -cross/2*(1 + 1j*omega*tau)*beta/(K*hbar*omega)*tp/(np.pi/(8*K))**(1/2)
             const1 = const1*(10**8)**(2*K)
             return const1*E*np.abs(E)**(2*K)
             
