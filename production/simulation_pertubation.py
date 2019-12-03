@@ -22,12 +22,12 @@ Lz = 10.
 Nz = int(6000*Lz)
 nb_save = 200
 
-laser = laser.laser(L, N, Lz, Nz, k, K, 'Total', nb_save = nb_save)
+laser = laser.laser(L, N, Lz, Nz, k, K, 'Pertubation', nb_save = nb_save)
 laser.initialize(gauss)
 laser.propagation()
 
 #print(laser.intensity_z.shape)
-with open('../results/intensity_total.txt', 'wb') as outfile:
+with open('../results/intensity_pertubation.txt', 'wb') as outfile:
     #outfile.write('# Array shape: {0}\n'.format(laser.E_z.shape))   
     for data_slice in laser.intensity_z:
         np.savetxt(outfile, data_slice)
