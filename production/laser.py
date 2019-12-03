@@ -8,9 +8,9 @@ class laser:
         self.K_coef = K_coef
         self.nb_save = nb_save
         
-        self.intensity_z = np.zeros([Nz, 2*N, 2*N])
-        self.E_z = np.zeros([Nz, 2*N, 2*N])
+        self.intensity_z = np.zeros([int(Nz/nb_save), 2*N, 2*N])
         self.E = np.zeros([N,N])
+        self.total = np.zeros(Nz)
         
         self.Lz = Lz
         self.Nz = Nz
@@ -44,10 +44,9 @@ class laser:
     def propagation(self, cross = 5.1*1e-24, light = 3*1e8 , lamb = 775*1e-9\
         , tau = 3.5*1e-13, beta = 6.5*1e-104, hbar = 6.62*1e-34, n2 = 5.57*1e-23\
         ,K = 7, tp = 85*1e-15, f = 0.5):
-        E_z = []
+        energy = []
+        energy.append(np.sum(np.abs(self.E)**2))
         intensity_z = []
-        E_z.append(self.E)
-        intensity_z.append(np.abs(self.E)**2)
         dz = self.Lz/self.Nz
         
         print('Begin propagation')
@@ -55,11 +54,11 @@ class laser:
             self.step(dz, cross, light ,lamb, tau, beta, hbar, n2, K, tp, f) 
             sys.stdout.write('\rCompleted: %.2f %%' %(l/(self.Nz -2)*100))
             sys.stdout.flush()
+            energy.append(np.sum(np.abs(self.E)**2))
             if(l % self.nb_save == 0):
-                E_z.append(self.E)
                 intensity_z.append(np.abs(self.E)**2)
                 
-        self.E_z = np.asarray(E_z)
+        self.energy = np.asarray(energy)
         self.intensity_z = np.asarray(intensity_z)
    
     def nonlinear(self, E, cross, light ,lamb, tau, beta, hbar, n2, K, tp, f):
