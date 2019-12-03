@@ -16,11 +16,16 @@ gauss = gaussian.Gaussian(w0, AMP, x0)
 lamb = 775*1e-9
 k = 2*np.pi/lamb
 K = 7
-L = 3*1e-3
-N = 64
-Lz = 10.
-Nz = int(6000*Lz)
-nb_save = 200
+L = 1600*1e-4
+N = 128
+Lz = 2.
+Nz = int(1000*Lz)
+nb_save = 10
+
+parameter = [lamb, k, K, L, N, Lz, Nz, nb_save]
+
+with open('../results/parameter_total.txt', 'wb') as outfile:
+    np.savetxt(outfile, parameter)
 
 laser = laser.laser(L, N, Lz, Nz, k, K, 'Total', nb_save = nb_save)
 laser.initialize(gauss)
