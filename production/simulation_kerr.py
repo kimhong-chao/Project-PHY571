@@ -19,6 +19,12 @@ L = 16*1e-4
 N = 64
 Lz = 1.0
 Nz = 1000
+nb_save = 1
+
+parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save]
+
+with open('../results/parameter_kerr.txt', 'wb') as outfile:
+    np.savetxt(outfile, parameter)
 
 laser = laser.laser(L, N, Lz, Nz, k, K, 'Kerr', nb_save = 10)
 laser.initialize(gauss)
@@ -29,7 +35,9 @@ with open('../results/intensity_kerr.txt', 'wb') as outfile:
     for data_slice in laser.intensity_z:
         np.savetxt(outfile, data_slice)
 
-                    
+#print(laser.intensity_z.shape)
+with open('../results/energy_kerr.txt', 'wb') as outfile:
+    np.savetxt(outfile, laser.energy)
 
     
 
