@@ -18,17 +18,15 @@ k = 2*np.pi/lamb
 K = 7
 L = 16*1e-4
 N = 64
-Lz = 1.0
-Nz = 512
+Lz = 2.0
+Nz = 1000
 
 laser = laser.laser(L, N, Lz, Nz, k, K, 'Plasma', nb_save = 10)
 laser.initialize(gauss)
 laser.propagation()
 
-with open('../results/result_plasma.txt', 'wb') as outfile:
-    #outfile.write('# Array shape: {0}\n'.format(laser.E_z.shape))   
+with open('../results/intensity_plasma.txt', 'wb') as outfile:
     for data_slice in laser.intensity_z:
         np.savetxt(outfile, data_slice)
-        #outfile.write('# New slice\n')
                     
 
