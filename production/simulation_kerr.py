@@ -2,43 +2,41 @@ import laser as l
 import gaussian
 import numpy as np
 
-w0 = 0.7*1e-3
-Pcr = 1.6*1e9
-p = 4
-Pin = p*Pcr
-AMP = (2*Pin/(np.pi*w0**2))**(1/2)*1e-8
-x0 = [0., 0.]
-
-gauss = gaussian.Gaussian(w0, AMP, x0)
-
-lamb = 775*1e-9
-k = 2*np.pi/lamb
-K = 7
+#Box's parameters
 L = 16*1e-4
 N = 64
 Lz = 1.5
 Nz = 2000
-nb_save = 10
+nb_save = 1
 
-parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p]
+#Laser's parameters
+w0 = 0.7*1e-3
+n2 = 5.57*1e-23
+lamb = 775*1e-9
+k = 2*np.pi/lamb
+K = 7
+Pcr = 3.77*np.pi/(2*k**2*n2)
+p = 4
+Pin = p*Pcr
+parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p, n2]
 
-with open('../results/parameter_kerr.txt', 'wb') as outfile:
+with open('../results/Kerr/parameter_kerr.txt', 'wb') as outfile:
     np.savetxt(outfile, parameter)
 
-laser = l.laser(L, N, Lz, Nz, k, K, 'Kerr', nb_save = nb_save)
-laser.initialize(gauss)
-laser.propagation()
+#laser = l.laser(L, N, Lz, Nz, k, K, 'Kerr', nb_save = nb_save)
+#laser.initialize(gauss)
+#laser.propagation()
 
 #print(laser.intensity_z.shape)
-with open('../results/intensity_kerr.txt', 'wb') as outfile:
+#with open('../results/Kerr/intensity_kerr.txt', 'wb') as outfile:
     #outfile.write('# Array shape: {0}\n'.format(laser.E_z.shape))   
-    for data_slice in laser.intensity_z:
-        np.savetxt(outfile, data_slice)
+#    for data_slice in laser.intensity_z:
+#        np.savetxt(outfile, data_slice)
         #outfile.write('# New slice\n')
         
 #print(laser.intensity_z.shape)
-with open('../results/energy_kerr.txt', 'wb') as outfile:
-    np.savetxt(outfile, laser.energy)
+#with open('../results/Kerr/energy_kerr.txt', 'wb') as outfile:
+#    np.savetxt(outfile, laser.energy)
     
     
     
@@ -76,7 +74,7 @@ for i in p:
     print("Complete: ",i/10*100,"%")
     point_div.append(div)
     
-with open('../results/intensity_kerr_divergence.txt', 'wb') as outfile:
+with open('../results/Kerr/divergence_kerr.txt', 'wb') as outfile:
         np.savetxt(outfile, point_div)
 
     
