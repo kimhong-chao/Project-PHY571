@@ -12,23 +12,35 @@ x0 = [0., 0.]
 
 gauss = gaussian.Gaussian(w0, AMP, x0)
 
-lamb = 790*1e-9
+lamb = 775*1e-9
 k = 2*np.pi/lamb
 K = 7
-L = 16*1e-4
+L = 1600*1e-6
 N = 64
-Lz = 2.0
-Nz = 1000
+Lz = 3.
+Nz = int(3000*Lz)
+nb_save = 100
 
-laser = laser.laser(L, N, Lz, Nz, k, K, 'Linear', nb_save = 10)
+parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p]
+
+with open('../results/parameter_linear.txt', 'wb') as outfile:
+    np.savetxt(outfile, parameter)
+
+laser = laser.laser(L, N, Lz, Nz, k, K, 'Linear', nb_save = nb_save)
 laser.initialize(gauss)
+
+#print(Pin*1e-16/np.sum(np.abs(laser.E)**2))
+
 laser.propagation()
 
-
+#print(laser.intensity_z.shape)
 with open('../results/intensity_linear.txt', 'wb') as outfile:
-    #outfile.write('# Array shape: {} \n'.format(laser.E_z.shape,))  
+    #outfile.write('# Array shape: {0}\n'.format(laser.E_z.shape))   
     for data_slice in laser.intensity_z:
         np.savetxt(outfile, data_slice)
         #outfile.write('# New slice\n')
-                    
+        
+#print(laser.intensity_z.shape)
+with open('../results/energy_linear.txt', 'wb') as outfile:
+    np.savetxt(outfile, laser.energy)
 

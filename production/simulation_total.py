@@ -16,13 +16,13 @@ gauss = gaussian.Gaussian(w0, AMP, x0)
 lamb = 775*1e-9
 k = 2*np.pi/lamb
 K = 7
-L = 1600*1e-4
-N = 128
-Lz = 2.
-Nz = int(1000*Lz)
-nb_save = 10
+L = 351*1e-3
+N = 512
+Lz = 10.
+Nz = int(3000*Lz)
+nb_save = 100*Lz
 
-parameter = [lamb, k, K, L, N, Lz, Nz, nb_save]
+parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p]
 
 with open('../results/parameter_total.txt', 'wb') as outfile:
     np.savetxt(outfile, parameter)
@@ -37,3 +37,7 @@ with open('../results/intensity_total.txt', 'wb') as outfile:
     for data_slice in laser.intensity_z:
         np.savetxt(outfile, data_slice)
         #outfile.write('# New slice\n')
+        
+#print(laser.intensity_z.shape)
+with open('../results/energy_total.txt', 'wb') as outfile:
+    np.savetxt(outfile, laser.energy)
