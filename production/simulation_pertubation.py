@@ -28,18 +28,18 @@ nb_save = 100*Lz
 
 #Array of parameter used to call in the analysis code
 parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p]
-np.savetxt('../results/parameter_pertu.txt', parameter)
+np.savetxt('../results/Pertubation/parameter_pertu.txt', parameter)
 
 laser = laser.laser(L, N, Lz, Nz, k, K, 'Pertubation', nb_save = nb_save)
 laser.initialize(gauss)
 laser.propagation()
 
 #print(laser.intensity_z.shape)
-with open('../results/intensity_pertubation.txt', 'wb') as outfile:
+with open('../results/Pertubation/intensity_pertubation.txt', 'wb') as outfile:
     #outfile.write('# Array shape: {0}\n'.format(laser.E_z.shape))   
     for data_slice in laser.intensity_z:
         np.savetxt(outfile, data_slice)
         #outfile.write('# New slice\n')
         
-np.savetxt('../results/energy_pertu.txt', laser.energy)
-np.savetxt('../results/inten_max_pertu.txt', laser.inten_max)
+np.savetxt('../results/Pertubation/energy_pertu.txt', laser.energy)
+np.savetxt('../results/Pertubation/inten_max_pertu.txt', laser.inten_max)
