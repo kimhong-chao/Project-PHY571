@@ -20,7 +20,7 @@ p = 4
 Pin = p*Pcr
 parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p, n2]
 
-with open('../results/Kerr/parameter_kerr.txt', 'wb') as outfile:
+with open('../results/parameter_kerr.txt', 'wb') as outfile:
     np.savetxt(outfile, parameter)
 
 #laser = l.laser(L, N, Lz, Nz, k, K, 'Kerr', nb_save = nb_save)
@@ -74,7 +74,7 @@ for i in p:
     print("Complete: ",i/10*100,"%")
     point_div.append(div)
     
-with open('../results/Kerr/divergence_kerr.txt', 'wb') as outfile:
+with open('../results/divergence_kerr.txt', 'wb') as outfile:
         np.savetxt(outfile, point_div)
 
     
