@@ -11,8 +11,8 @@ and it is divided into :
   + simulation_kerr : calculate and save the result of diffraction term and Kerr term
   + simulation_plasma : calculate and save the result of plasma term
   + simulation_absorption : calculate and save the result of multiphoton absorption term
-  + simulation_total : calculate and save the result of all terms
-  + simulation_pertubation : calculate and save the result of all terms with pertubation
+  + simulation_total : calculate and save the result of all terms (Attention this code takes time)
+  + simulation_pertubation : calculate and save the result of all terms with pertubation (Attention this code takes time)
   
   **The file with the name simulation can be executed independently**
   
