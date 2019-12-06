@@ -22,27 +22,23 @@ Pin = p*Pcr
 AMP = (2*Pin/(np.pi*w0**2))**(1/2)*1e-8
 x0 = [0., 0.]
 
+L = 8*1e-3
+N = 200
+Lz = 10.
+Nz = int(3000*Lz)
+nb_save = 100*Lz
 
-parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p, n2]
-
-
-with open('../results/parameter_total.txt', 'wb') as outfile:
-    np.savetxt(outfile, parameter)
+parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p]
+np.savetxt('../results/parameter_total.txt', parameter)
 
 gauss = gaussian.Gaussian(w0, AMP, x0)
 laser = laser.laser(L, N, Lz, Nz, k, K, 'Total', nb_save = nb_save)
 laser.initialize(gauss)
-#print(np.sum(np.abs(laser.E)**2)/(Pin*1e-16))
-
 laser.propagation()
 
-#print(laser.intensity_z.shape)
 with open('../results/intensity_total.txt', 'wb') as outfile:
-    #outfile.write('# Array shape: {0}\n'.format(laser.E_z.shape))   
     for data_slice in laser.intensity_z:
         np.savetxt(outfile, data_slice)
-        #outfile.write('# New slice\n')
         
-#print(laser.intensity_z.shape)
-with open('../results/energy_total.txt', 'wb') as outfile:
-    np.savetxt(outfile, laser.energy*(L/N)**2)
+np.savetxt('../results/energy_total.txt', laser.energy*(L/N)**2)
+np.savetxt('../results/inten_max_total.txt', laser.inten_max)

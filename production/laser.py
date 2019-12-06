@@ -12,6 +12,8 @@ class laser:
         self.E = np.zeros([N,N])
         self.total = np.zeros(Nz)
         
+        self.N = N
+        self.L = L
         self.Lz = Lz
         self.Nz = Nz
         
@@ -30,7 +32,7 @@ class laser:
     def initialize(self, func):
         self.E = func(self.x, self.y)
         if(self.effect == 'Pertubation'):
-            self.E += np.max(self.E)*1e-1*np.random.uniform(-1,1)
+            self.E += np.max(self.E)*1e-1*np.random.rand(2*self.N,2*self.N)
         
     def step(self, dz, cross, light, lamb, tau, beta, hbar, n2, K, tp, f):
         if(self.effect == 'Linear' or self.effect == 'Kerr'  \
@@ -45,7 +47,9 @@ class laser:
         , tau = 3.5*1e-13, beta = 6.5*1e-104, hbar = 6.62*1e-34, n2 = 5.57*1e-23\
         ,K = 7, tp = 85*1e-15, f = 0.5):
         energy = []
+        inten_max = []
         energy.append(np.sum(np.abs(self.E)**2))
+        inten_max.append(np.max(np.abs(self.E)**2))
         intensity_z = []
         dz = self.Lz/self.Nz
         
@@ -55,9 +59,12 @@ class laser:
             sys.stdout.write('\rCompleted: %.2f %%' %(l/(self.Nz -2)*100))
             sys.stdout.flush()
             energy.append(np.sum(np.abs(self.E)**2))
+            inten_max.append(np.max(np.abs(self.E)**2))
+
             if(l % self.nb_save == 0):
                 intensity_z.append(np.abs(self.E)**2)
                 
+        self.inten_max = np.asarray(inten_max)
         self.energy = np.asarray(energy)
         self.intensity_z = np.asarray(intensity_z)
    

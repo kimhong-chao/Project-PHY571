@@ -17,15 +17,14 @@ lamb = 775*1e-9
 k = 2*np.pi/lamb
 K = 7
 L = 8*1e-3
-N = 128
-Lz = 3.
+N = 200
+Lz = 10.
 Nz = int(3000*Lz)
 nb_save = 100*Lz
 
 parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p]
 
-with open('../results/parameter_pertubation.txt', 'wb') as outfile:
-    np.savetxt(outfile, parameter)
+np.savetxt('../results/parameter_pertu.txt', parameter)
 
 laser = laser.laser(L, N, Lz, Nz, k, K, 'Pertubation', nb_save = nb_save)
 laser.initialize(gauss)
@@ -38,6 +37,5 @@ with open('../results/intensity_pertubation.txt', 'wb') as outfile:
         np.savetxt(outfile, data_slice)
         #outfile.write('# New slice\n')
         
-#print(laser.intensity_z.shape)
-with open('../results/energy_pertubation.txt', 'wb') as outfile:
-    np.savetxt(outfile, laser.energy)
+np.savetxt('../results/energy_pertu.txt', laser.energy)
+np.savetxt('../results/inten_max_pertu.txt', laser.inten_max)
