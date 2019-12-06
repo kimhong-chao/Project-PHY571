@@ -1,8 +1,11 @@
+'''
+This class gives the property of laser including parameters used to represent the laser
+'''
 import numpy as np
 import sys
 class laser:
     def __init__(self, L, N, Lz, Nz, wave_nb, K_coef, effect, nb_save):
-        
+        """Construct a configuration of a laser with discretisation, parameters of laser and how to save data"""
         self.effect = effect
         self.wave_nb = wave_nb
         self.K_coef = K_coef
@@ -30,11 +33,13 @@ class laser:
         
         
     def initialize(self, func):
+        '''Initialize the input pulse laser'''
         self.E = func(self.x, self.y)
         if(self.effect == 'Pertubation'):
             self.E += np.max(self.E)*1e-1*np.random.rand(2*self.N,2*self.N)
         
     def step(self, dz, cross, light, lamb, tau, beta, hbar, n2, K, tp, f):
+        '''Algorithm for laser propagation'''
         if(self.effect == 'Linear' or self.effect == 'Kerr'  \
            or self.effect == 'Total' or self.effect == 'Pertubation'):
             Ek = np.fft.fft2(self.E)
@@ -46,6 +51,7 @@ class laser:
     def propagation(self, cross = 5.1*1e-24, light = 3*1e8 , lamb = 775*1e-9\
         , tau = 3.5*1e-13, beta = 6.5*1e-104, hbar = 6.62*1e-34, n2 = 5.57*1e-23\
         ,K = 7, tp = 85*1e-15, f = 0.5):
+        '''Calculation by looping the algorithm'''
         energy = []
         inten_max = []
         energy.append(np.sum(np.abs(self.E)**2))
@@ -69,8 +75,7 @@ class laser:
         self.intensity_z = np.asarray(intensity_z)
    
     def nonlinear(self, E, cross, light ,lamb, tau, beta, hbar, n2, K, tp, f):
-        #constant used in nonlinear part of equation
-        
+        '''Nonlinear function in the equation'''        
         omega = 2*np.pi*light/lamb
 
         if(self.effect == 'Linear'):

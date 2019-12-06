@@ -1,3 +1,6 @@
+'''
+This class is used for initialisation 
+'''
 import numpy as np
 
 class Gaussian:

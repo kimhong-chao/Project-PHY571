@@ -27,7 +27,7 @@ Lz = 2.0
 Nz = 1000
 nb_save = 10
 
-#Spacial disscretization
+#Array of parameter used to call in the analysis code
 parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p]
 np.savetxt('../results/Absorption/parameters_absorption.txt', parameter)
 

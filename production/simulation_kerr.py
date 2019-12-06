@@ -1,3 +1,7 @@
+'''
+This code is used to simulate the result of intensity of laser
+and save it into directory below
+'''
 import laser as l
 import gaussian
 import numpy as np
@@ -23,35 +27,16 @@ parameter = [Pcr*1e-16, k, K, L, N, Lz, Nz, nb_save, w0, p, n2]
 with open('../results/Kerr/parameter_kerr.txt', 'wb') as outfile:
     np.savetxt(outfile, parameter)
 
-#laser = l.laser(L, N, Lz, Nz, k, K, 'Kerr', nb_save = nb_save)
-#laser.initialize(gauss)
-#laser.propagation()
-
-#print(laser.intensity_z.shape)
-#with open('../results/Kerr/intensity_kerr.txt', 'wb') as outfile:
-    #outfile.write('# Array shape: {0}\n'.format(laser.E_z.shape))   
-#    for data_slice in laser.intensity_z:
-#        np.savetxt(outfile, data_slice)
-        #outfile.write('# New slice\n')
-        
-#print(laser.intensity_z.shape)
-#with open('../results/Kerr/energy_kerr.txt', 'wb') as outfile:
-#    np.savetxt(outfile, laser.energy)
-    
-    
-    
 def find_div(u):
     Pin = u*Pcr
     AMP = (2*Pin/(np.pi*w0**2))**(1/2)*1e-8
     x0 = [0., 0.]
     
     gauss = gaussian.Gaussian(w0, AMP, x0)
-
     
     laser_f = l.laser(L, N, Lz, Nz, k, K, 'Kerr', nb_save = nb_save)
     laser_f.initialize(gauss)
     laser_f.propagation(f = 0.0)
-    
     
     list_div = []
     for i in range(laser_f.intensity_z.shape[0]):
