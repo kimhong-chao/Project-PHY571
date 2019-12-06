@@ -15,7 +15,8 @@ and it is divided into :
   + simulation_pertubation : calculate and save the result of all terms with pertubation
   
   **The file with the name simulation can be executed independently**
-  **The file with the name analyze can be executed if you have results from production **
+  
+  **The file with the name analyze can be executed if you have results from production**
   
 * analysis : after having the result from the code in production, the files jupyter notebook is executed correspond to the 
 files python inside production
